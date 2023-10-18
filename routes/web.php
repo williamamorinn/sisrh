@@ -3,28 +3,14 @@
 use App\Http\Controllers\CargoController;
 use App\Http\Controllers\DepartamentoController;
 use App\Http\Controllers\FuncionarioController;
+use App\Http\Controllers\Logincontroller;
 use App\Http\Controllers\UserController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
-
-Route::get('/', function () {
-    return view('login');
-});
-
-/*Route::get('/funcionarios', function () {
-    return view('funcionarios.index');
-});*/
+Route::get('/', [Logincontroller::class, 'index'])->name('login.index');
+Route::post('/auth', [Logincontroller::class, 'auth'])->name('login.auth');
+Route::get('/logout', [Logincontroller::class, 'logout'])->name('login.logout');
 
 Route::get('/funcionarios', [FuncionarioController::class, 'index'])->name('funcionarios.index');
 Route::get('/funcionarios/create', [FuncionarioController::class, 'create'])->name('funcionarios.create');
@@ -50,3 +36,4 @@ Route::post('/users', [UserController::class, 'store'])->name('users.store');
 Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
 Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
 Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
+
