@@ -5,6 +5,10 @@
 @section('content')
     <h1 class="fs-2 mb-3">Alterar usuário</h1>
 
+    @if (Session::get('sucesso'))
+        <div class="alert alert-success text-center">{{ Session::get('sucesso') }}</div>
+    @endif
+
     <form class="row g-3" method="POST" action="{{ route('users.update', $user->id) }}" enctype="multipart/form-data">
         @csrf <!--token for security-->
         @method('PUT')
