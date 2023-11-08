@@ -10,4 +10,9 @@ class Cargo extends Model
     use HasFactory;
 
     protected $fillable = ['descricao'];
+
+    public function FuncionariosAtivos()
+    {
+        return $this->hasMany(Funcionario::class)->where('status','=','on');
+    }
 }

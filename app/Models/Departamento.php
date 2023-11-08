@@ -11,4 +11,9 @@ class Departamento extends Model
 
     protected $fillable = ['nome'];
 
+    public function FuncionariosAtivos()
+    {
+        return $this->hasMany(Funcionario::class)->where('status','=','on');
+    }
+
 }

@@ -1,6 +1,6 @@
-@extends('layouts.default');
+@extends('layouts.default')
 
-@section('title', 'SisRH - Dashboard');
+@section('title', 'SisRH - Dashboard')
 
 @section('content')
 
@@ -71,11 +71,22 @@
         new Chart(graficoDepartamentos, {
             type: 'bar',
             data: {
-                labels: ['jan', 'fev', 'mar'],
+                //labels: ['jan', 'fev', 'mar'],
+                labels: 
+                [
+                    @foreach ($departamentos as $departamento)
+                    '{{ $departamento->nome }}',
+                    @endforeach
+                ],
                 datasets: [{
                     axis: 'y',
                     label: '',
-                    data: [10, 50, 20],
+                    data: [
+                        @foreach ($departamentos as $departamento )
+                            {{ $departamento->FuncionariosAtivos->count(); }},
+                            
+                        @endforeach
+                    ],
                     fill: false,
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.2)',
@@ -113,10 +124,18 @@
         new Chart(graficoCargos, {
             type: 'doughnut',
             data: {
-                labels: ['jan', 'fev'],
+                labels: [
+                    @foreach ($cargos as $cargo)
+                           '{{ $cargo->descricao }}',
+                        @endforeach
+                ],
                 datasets: [{
                     label: '',
-                    data: [20, 30],
+                    data: [
+                        @foreach ($cargos as $cargo)
+                                {{ $cargo->funcionariosAtivos->count(); }},
+                        @endforeach
+                    ],
                     backgroundColor: [
                         'rgb(255, 99, 132)',
                         'rgb(255, 159, 64)',
