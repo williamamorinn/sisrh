@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Models\User;
 
 return new class extends Migration
 {
@@ -16,10 +17,19 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
+            $table->enum('tipo', ['usuario', 'admin']);
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
         });
+
+        // Inserir um registro de usuário
+        User::create([
+            'name' => 'Admin',
+            'email' => 'admin@mail.com',
+            'tipo' => 'admin',
+            'password' => bcrypt('admin')
+        ]);
     }
 
     /**
