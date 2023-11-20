@@ -7,17 +7,23 @@ use Illuminate\Http\Request;
 
 class CargoController extends Controller
 {
+    /* Verificar se o usuário estar logado no sistema */
     public function __construct()
-           { 
-                $this->middleware('auth');
-           }
+    {
+        $this->middleware('auth');
+    }
+    
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $cargos = Cargo::all()->sortBy('descricao');
-        return view('cargos.index', compact('cargos'));
+        $cargos = Cargo::where('descricao', 'like', '%'.$request->busca.'%')->orderby('descricao', 'asc')->paginate(3);
+
+        $totalCargos = Cargo::all()->count();
+
+        // Receber os dados do banco através do model
+        return view('cargos.index', compact('cargos', 'totalCargos'));
     }
 
     /**
@@ -25,8 +31,8 @@ class CargoController extends Controller
      */
     public function create()
     {
-        $cargos = Cargo::all()->sortBy('descricao');
-        return view('cargos.create', compact('cargos'));
+        //Retornar o formulário do Cadastro de Cargo
+        return view('cargos.create');
     }
 
     /**
@@ -35,12 +41,12 @@ class CargoController extends Controller
     public function store(Request $request)
     {
         $input = $request->toArray();
-        //dd($input);
+        // dd($input);
 
-        $input['user_id'] = 1;
+        // Insert de dados do usuário no banco
         Cargo::create($input);
 
-        return redirect()->route('cargos.index')->with('sucesso', 'Cargo cadastrado com sucesso!');
+        return redirect()->route('cargos.index')->with('sucesso','Cargo Cadastrado com Sucesso');
     }
 
     /**
@@ -57,6 +63,11 @@ class CargoController extends Controller
     public function edit(string $id)
     {
         $cargo = Cargo::find($id);
+
+        if(!$cargo) {
+            return back();
+        }
+
         return view('cargos.edit', compact('cargo'));
     }
 
@@ -65,12 +76,13 @@ class CargoController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $cargos = Cargo::find($id);
+        $input = $request->toArray();
 
-        $cargos->descricao = $request->input('descricao');
-        $cargos->save();
+        $cargo = Cargo::find($id);
 
-        return redirect()->route('cargos.index')->with('sucesso', 'Funcionario alterado com sucesso!');
+        $cargo->fill($input);
+        $cargo->save();
+        return redirect()->route('cargos.index')->with('Sucesso', 'Cargo alterado com sucesso!');
     }
 
     /**
@@ -78,6 +90,12 @@ class CargoController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $cargo = Cargo::find($id);
+        // dd($funcionario);
+
+        //Apagando o registro no banco de dados
+        $cargo->delete();
+
+        return redirect()->route('cargos.index')->with('sucesso', 'Cargo excluido com sucesso.');
     }
 }

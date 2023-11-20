@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -14,7 +15,7 @@ return new class extends Migration
         Schema::create('beneficio_funcionario', function (Blueprint $table) {
             $table->foreignId('beneficio_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('funcionario_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
-            $table->primary('beneficio_id', 'funcionario_id');
+            $table->primary(['beneficio_id', 'funcionario_id']);
             $table->timestamps();
         });
     }

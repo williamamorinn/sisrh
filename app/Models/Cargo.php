@@ -11,7 +11,7 @@ class Cargo extends Model
 
     protected $fillable = ['descricao'];
 
-    public function FuncionariosAtivos()
+    public function funcionariosAtivos()
     {
         return $this->hasMany(Funcionario::class)->where('status','=','on');
     }

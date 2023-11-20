@@ -7,17 +7,23 @@ use Illuminate\Http\Request;
 
 class DepartamentoController extends Controller
 {
+    /* Verificar se o usuário estar logado no sistema */
     public function __construct()
-           { 
-                $this->middleware('auth');
-           }
+    {
+        $this->middleware('auth');
+    }
+    
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $departamentos = Departamento::all()->sortBy('nome');
-        return view('departamentos.index', compact('departamentos'));
+        $departamentos = Departamento::where('nome', 'like', '%'.$request->busca.'%')->orderby('nome', 'asc')->paginate(3);
+
+        $totalDepartamentos = Departamento::all()->count();
+
+        // Receber os dados do banco através do model
+        return view('departamentos.index', compact('departamentos', 'totalDepartamentos'));
     }
 
     /**
@@ -25,8 +31,7 @@ class DepartamentoController extends Controller
      */
     public function create()
     {
-        $departamentos = Departamento::all()->sortBy('nome');
-        return view('departamentos.create', compact('departamentos'));
+        return view('departamentos.create');
     }
 
     /**
@@ -34,14 +39,13 @@ class DepartamentoController extends Controller
      */
     public function store(Request $request)
     {
-
         $input = $request->toArray();
-        //dd($input);
+        // dd($input);
 
-        $input['user_id'] = 1;
+        // Inserir os dados do departamento no banco
         Departamento::create($input);
 
-        return redirect()->route('departamentos.index')->with('sucesso', 'Departamento cadastrado com sucesso!');
+        return redirect()->route('departamentos.index')->with('sucesso','Departamento Cadastrado com Sucesso');
     }
 
     /**
@@ -59,7 +63,7 @@ class DepartamentoController extends Controller
     {
         $departamento = Departamento::find($id);
 
-        if(!$departamento){
+        if(!$departamento) {
             return back();
         }
 
@@ -71,12 +75,13 @@ class DepartamentoController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $input = $request->toArray();
+
         $departamento = Departamento::find($id);
 
-        $departamento->nome = $request->input('nome');
+        $departamento->fill($input);
         $departamento->save();
-
-        return redirect()->route('departamentos.index')->with('sucesso', 'Funcionario alterado com sucesso!');
+        return redirect()->route('departamentos.index')->with('Sucesso', 'Departamento alterado com sucesso!');
     }
 
     /**
@@ -84,6 +89,12 @@ class DepartamentoController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $departamento = Departamento::find($id);
+        // dd($funcionario);
+
+        //Apagando o registro no banco de dados
+        $departamento->delete();
+
+        return redirect()->route('departamentos.index')->with('sucesso', 'Departamento excluido com sucesso.');
     }
 }
