@@ -10,7 +10,7 @@
 
 <div class="col-md-4">
     <label for="password" class="form-label">Senha</label>
-    <input type="text" class="form-control" id="password" name="password" value="" required>
+    <input type="password" class="form-control" id="password" name="password" value="{{ $usuario->password ?? "" }}" required>
 </div>
 
 @can('tipo_usuario')
