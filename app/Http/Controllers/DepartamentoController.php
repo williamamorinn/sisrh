@@ -18,7 +18,7 @@ class DepartamentoController extends Controller
      */
     public function index(Request $request)
     {
-        $departamentos = Departamento::where('nome', 'like', '%'.$request->busca.'%')->orderby('nome', 'asc')->paginate(3);
+        $departamentos = Departamento::where('nome', 'like', '%'.$request->busca.'%')->orderby('nome', 'asc')->paginate(10);
 
         $totalDepartamentos = Departamento::all()->count();
 

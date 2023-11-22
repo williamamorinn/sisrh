@@ -21,7 +21,7 @@ class UsuarioController extends Controller
     {
         /* Verifica se o usuário tem permissão */
         if(Gate::allows('tipo_usuario')){
-            $usuarios = User::where('name', 'like', '%'.$request->busca.'%')->orderby('name', 'asc')->paginate(3);
+            $usuarios = User::where('name', 'like', '%'.$request->busca.'%')->orderby('name', 'asc')->paginate(10);
 
             $totalUsuarios = User::all()->count();
 

@@ -19,7 +19,7 @@ class BeneficioController extends Controller
     public function index(Request $request)
     {
         $beneficios = Beneficio::where('descricao', 'like', '%'.$request->busca.'%')
-        ->orderby('descricao', 'asc')->paginate(3);
+        ->orderby('descricao', 'asc')->paginate(10);
 
         $totalBeneficios = Beneficio::all()->count();
 

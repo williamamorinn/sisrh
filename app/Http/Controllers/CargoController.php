@@ -18,7 +18,7 @@ class CargoController extends Controller
      */
     public function index(Request $request)
     {
-        $cargos = Cargo::where('descricao', 'like', '%'.$request->busca.'%')->orderby('descricao', 'asc')->paginate(3);
+        $cargos = Cargo::where('descricao', 'like', '%'.$request->busca.'%')->orderby('descricao', 'asc')->paginate(10);
 
         $totalCargos = Cargo::all()->count();
 

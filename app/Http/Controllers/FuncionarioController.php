@@ -25,7 +25,7 @@ class FuncionarioController extends Controller
     {
         $funcionarios = Funcionario::where('nome', 'like', '%'.$request->busca.'%')
         ->where('status', 'on')
-        ->orderby('nome', 'asc')->paginate(3);
+        ->orderby('nome', 'asc')->paginate(10);
 
         $totalFuncionarios = Funcionario::all()->count();
 
